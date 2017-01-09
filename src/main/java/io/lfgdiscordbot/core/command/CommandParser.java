@@ -30,12 +30,14 @@ class CommandParser
         ArrayList<String> split = new ArrayList<>();
         Collections.addAll(split, splitTrimmed);
 
-        // take the first arg
         String invoke = split.get(0);
-
-        // divide out the remaining args from the first arg
-        String[] args = new String[split.size() - 1];
-        split.subList(1, split.size()).toArray(args);
+        ArrayList<String> args = new ArrayList<>();
+        if( invoke.startsWith("lf") )
+        {
+            args.add(0,invoke.replace("lf",""));
+            invoke = "lf";
+        }
+        args.addAll(split.subList(1, split.size()));
 
         return new CommandContainer(invoke, args, e);
     }
@@ -48,10 +50,10 @@ class CommandParser
         final MessageReceivedEvent event;    // the originating event
 
         // constructor for CommandContainer
-        CommandContainer(String invoke, String[] args, MessageReceivedEvent e)
+        CommandContainer(String invoke, ArrayList<String> args, MessageReceivedEvent e)
         {
             this.invoke = invoke;
-            this.args = args;
+            this.args = args.toArray(new String[args.size()]);
             this.event = e;
         }
     }

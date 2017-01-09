@@ -2,6 +2,7 @@ package io.lfgdiscordbot.core.command;
 
 import io.lfgdiscordbot.Main;
 import io.lfgdiscordbot.commands.Command;
+import io.lfgdiscordbot.commands.general.*;
 import io.lfgdiscordbot.utils.MessageUtilities;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -28,6 +29,12 @@ public class CommandHandler
     public void init()
     {
         // add bot commands with their lookup name
+        commands.put("lf", new LookingForCommand() );
+        commands.put("close", new CloseCommand() );
+        commands.put( "join", new JoinCommand() );
+        commands.put( "renew", new RenewCommand() );
+        commands.put( "leave", new LeaveCommand() );
+        commands.put( "help", new HelpCommand() );
 
         // add administrator commands with their lookup name
     }
@@ -62,14 +69,14 @@ public class CommandHandler
             else
             {
                 String msg = "Error : " + err;
-                MessageUtilities.sendMsg( msg, cc.event.getChannel(), null );
+                MessageUtilities.sendPrivateMsg( msg, cc.event.getAuthor(), null );
             }
         }
         // else the invoking command is invalid
         else
         {
-            String msg = "Invalid command \"" + Main.getBotSettings().getCommandPrefix() + cc.invoke + "\"";
-            MessageUtilities.sendMsg( msg, cc.event.getChannel(), null );
+            String msg = "Error: Invalid command \"" + Main.getBotSettings().getCommandPrefix() + cc.invoke + "\"";
+            MessageUtilities.sendPrivateMsg( msg, cc.event.getAuthor(), null );
         }
     }
 

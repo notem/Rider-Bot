@@ -2,6 +2,7 @@ package io.lfgdiscordbot;
 
 import io.lfgdiscordbot.core.command.CommandHandler;
 import io.lfgdiscordbot.core.EventListener;
+import io.lfgdiscordbot.core.group.GroupManager;
 import io.lfgdiscordbot.utils.BotSettings;
 import io.lfgdiscordbot.utils.__out;
 import net.dv8tion.jda.core.AccountType;
@@ -18,6 +19,7 @@ public class Main
     private static BotSettings botSettings;     // global config botSettings
 
     private static CommandHandler commandHandler = new CommandHandler();
+    private static GroupManager groupManager = new GroupManager();
 
     public static void main( String[] args )
     {
@@ -46,7 +48,7 @@ public class Main
                 @Override
                 public String getName()
                 {
-                    return "pm me " + botSettings.getCommandPrefix() + "help or " + botSettings.getCommandPrefix() + "setup";
+                    return "LFG bot | " + botSettings.getCommandPrefix() + "help";
                 }
 
                 @Override
@@ -69,6 +71,7 @@ public class Main
         }
 
         commandHandler.init();
+        groupManager.init();
     }
 
 
@@ -90,5 +93,10 @@ public class Main
     public static CommandHandler getCommandHandler()
     {
         return commandHandler;
+    }
+
+    public static GroupManager getGroupManager()
+    {
+        return groupManager;
     }
 }

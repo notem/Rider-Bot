@@ -30,18 +30,7 @@ public class MessageUtilities
         catch( Exception e)
         {
             __out.printOut( MessageUtilities.class, e.getMessage() );
-        }
-    }
-
-    public static void sendMsg( String content, MessageChannel chan )
-    {
-        try
-        {
-            chan.sendMessage(content).block();
-        }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
+            e.printStackTrace();
         }
     }
 
@@ -62,6 +51,7 @@ public class MessageUtilities
         catch( Exception e)
         {
             __out.printOut( MessageUtilities.class, e.getMessage() );
+            e.printStackTrace();
         }
     }
 
@@ -81,6 +71,7 @@ public class MessageUtilities
         catch( Exception e)
         {
             __out.printOut( MessageUtilities.class, e.getMessage() );
+            e.printStackTrace();
         }
     }
 
@@ -99,18 +90,7 @@ public class MessageUtilities
         catch( Exception e)
         {
             __out.printOut( MessageUtilities.class, e.getMessage() );
-        }
-    }
-
-    public static void deleteMsg( Message msg )
-    {
-        try
-        {
-            msg.deleteMessage().block();
-        }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
+            e.printStackTrace();
         }
     }
 }

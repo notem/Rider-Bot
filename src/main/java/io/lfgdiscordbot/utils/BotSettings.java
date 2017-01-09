@@ -14,6 +14,9 @@ public class BotSettings
     private static final String DEFAULT_COMMAND_PREFIX = ":";
     private static final String DEFAULT_ADMIN_COMMAND_PREFIX = ".";
 
+    private static final String DEFAULT_EXPIRE = "1h";
+    private static final String DEFAULT_CHANNEL = "lfg";
+
     private Properties properties;
 
     public static BotSettings init()
@@ -64,6 +67,8 @@ public class BotSettings
             p.setProperty("admin_id", DEFAULT_ADMIN_ID);
             p.setProperty("command_prefix", DEFAULT_COMMAND_PREFIX);
             p.setProperty("admin_command_prefix", DEFAULT_ADMIN_COMMAND_PREFIX);
+            p.setProperty("channel", DEFAULT_CHANNEL);
+            p.setProperty("expire", DEFAULT_EXPIRE);
 
             // save properties to project root folder
             p.store(output, null);
@@ -97,11 +102,6 @@ public class BotSettings
         return this.properties.getProperty("admin_id");
     }
 
-    public int getMaxEntries()
-    {
-        return Integer.parseInt(this.properties.getProperty("max_entries"));
-    }
-
     public String getCommandPrefix()
     {
         return this.properties.getProperty("command_prefix");
@@ -112,33 +112,47 @@ public class BotSettings
         return this.properties.getProperty("admin_command_prefix");
     }
 
-    public String getAnnounceChan()
+    public String getChannel()
     {
-        return this.properties.getProperty("chan_announce");
+        return this.properties.getProperty("channel");
     }
 
-    public String getScheduleChan()
+    public Integer getExpire()
     {
-        return this.properties.getProperty("chan_schedule");
-    }
-
-    public String getControlChan()
-    {
-        return this.properties.getProperty("chan_control");
-    }
-
-    public String getAnnounceFormat()
-    {
-        return this.properties.getProperty("announce_msg_format");
-    }
-
-    public String getClockFormat()
-    {
-        return this.properties.getProperty("clock_format");
-    }
-
-    public String getTimeZone()
-    {
-        return this.properties.getProperty("time_zone");
+        Integer expire = 0;
+        String expireProp = this.properties.getProperty("expire");
+        String temp = "0";
+        for( int i = 0; i < expireProp.length(); i++)
+        {
+            if( Character.isDigit( expireProp.charAt(i) ) )
+            {
+                temp += expireProp.charAt(i);
+            }
+            else
+            {
+                switch (expireProp.charAt(i))
+                {
+                    case 's' :
+                        expire += Integer.parseInt(temp);
+                        break;
+                    case 'm' :
+                        expire += 60 * Integer.parseInt(temp);
+                        break;
+                    case 'h' :
+                        expire += 60*60 * Integer.parseInt(temp);
+                        break;
+                    case 'd' :
+                        expire += 60*60*24 * Integer.parseInt(temp);
+                        break;
+                    case 'w' :
+                        expire += 60*60*24*7 * Integer.parseInt(temp);
+                        break;
+                    default :
+                        return expire;
+                }
+                temp = "0";
+            }
+        }
+        return expire;
     }
 }

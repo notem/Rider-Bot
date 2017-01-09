@@ -2,18 +2,17 @@ package io.lfgdiscordbot.core;
 
 import io.lfgdiscordbot.Main;
 import io.lfgdiscordbot.core.command.CommandHandler;
-import net.dv8tion.jda.core.MessageHistory;
+import io.lfgdiscordbot.utils.MessageUtilities;
+import io.lfgdiscordbot.utils.__out;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -36,132 +35,62 @@ public class EventListener extends ListenerAdapter
         // store some properties of the message for use later
         String content = event.getMessage().getContent();   // the raw string the user sent
         String userId = event.getAuthor().getId();          // the ID of the user
-        String origin = event.getChannel().getName();       // the name of the originating text channel
 
-        if (event.isFromType(ChannelType.PRIVATE))
+        if( content.startsWith(prefix) )
         {
-            if (content.startsWith(prefix + "help") || content.startsWith(prefix + "setup"))
-            {
-                cmdHandler.handleCommand(event, 0);
-                return;
-            }
-            else if (content.startsWith(adminPrefix) && userId.equals(adminId))
-            {
-                cmdHandler.handleCommand(event, 1);
-                return;
-            }
-            return;
-        }
-
-        // if main schedule channel is not setup go no further
-        if( !VerifyUtilities.verifyScheduleChannel( event.getGuild() ) )
-        {
-           return;
-        }
-
-        if (origin.equals(controlChan) && content.startsWith(prefix))
-        {
-            // handle command received
             cmdHandler.handleCommand(event, 0);
-            return;
+            if( !event.getChannelType().equals(ChannelType.PRIVATE) )
+                MessageUtilities.deleteMsg( event.getMessage(), null );
         }
 
-        if (origin.equals(scheduleChan))
+        else if (content.startsWith(adminPrefix) && userId.equals(adminId))
         {
-            // delete other user's messages
-            if (!userId.equals(Main.getBotSelfUser().getId()))
-                MessageUtilities.deleteMsg(event.getMessage(), null);
+            cmdHandler.handleCommand(event, 1);
+            if( !event.getChannelType().equals(ChannelType.PRIVATE) )
+                MessageUtilities.deleteMsg( event.getMessage(), null );
+        }
 
-            // if it is from myself, resend the guild botSettings message (so that it is at the bottom)
-            else
-                channelSettingsManager.sendSettingsMsg(event.getChannel());
+        else if(event.getChannel().getName().equals("lfg") && !event.getAuthor().getId().equals(Main.getBotSelfUser().getId()))
+        {
+            MessageUtilities.deleteMsg( event.getMessage(), null );
         }
     }
 
     @Override
-    public void onReady(ReadyEvent event)
-    {
-        // loads schedules and botSettings for every connected guild
-        for (Guild guild : event.getJDA().getGuilds())
-        {
-            Collection<TextChannel> chans = ParsingUtilities.channelsStartsWith( guild, scheduleChan);
-
-            if (!chans.isEmpty())
-            {
-                // parseMsgFormat the history of each schedule channel
-                for( TextChannel chan : chans )
-                {
-                    MessageHistory history = chan.getHistory();
-
-                    // ready a consumer to parseMsgFormat the history
-                    Consumer<List<Message>> cons = (l) ->
-                    {
-                        for (Message message : l)
-                        {
-                            if (message.getAuthor().getId().equals(Main.getBotSelfUser().getId()))
-                            {
-                                if (message.getRawContent().startsWith("```java"))
-                                    channelSettingsManager.loadSettings(message);
-                                else
-                                    scheduleManager.addEntry(message);
-                            }
-                            else
-                                MessageUtilities.deleteMsg(message, null);
-                        }
-
-                        channelSettingsManager.checkChannel(chan);
-                    };
-
-                    // retrieve history and have the consumer act on it
-                    history.retrievePast((maxEntries >= 0) ? maxEntries * 2 : 50).queue(cons);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onGuildJoin( GuildJoinEvent event )
+    public void onGuildJoin(GuildJoinEvent event)
     {
         Guild guild = event.getGuild();
-        Collection<TextChannel> chans = ParsingUtilities.channelsStartsWith( guild, scheduleChan);
 
-        if (!chans.isEmpty())
+        Main.getGroupManager().addGuild( guild.getId() );
+
+        if( !guild.getTextChannelsByName("lfg", false).isEmpty() )
         {
-            for( TextChannel chan : chans )
+            TextChannel lfgChannel = guild.getTextChannelsByName("lfg", false).get(0);
+
+            Consumer<List<Message>> clearChannel = (list) ->
             {
-                // create a message history object
-                MessageHistory history = chan.getHistory();
-
-                // create a consumer
-                Consumer<List<Message>> cons = (l) ->
+                for( Message message : list )
                 {
-                    for (Message message : l)
-                    {
-                        if (message.getAuthor().getId().equals(Main.getBotSelfUser().getId()))
-                        {
-                            if (message.getRawContent().startsWith("```java"))
-                                channelSettingsManager.loadSettings(message);
-                            else
-                                scheduleManager.addEntry(message);
-                        } else
-                            MessageUtilities.deleteMsg(message, null);
-                    }
+                    MessageUtilities.deleteMsg( message, null );
+                }
+            };
 
-                    channelSettingsManager.checkChannel(chan);
-                };
-
-                // retrieve history and have the consumer act on it
-                history.retrievePast((maxEntries >= 0) ? maxEntries * 2 : 50).queue(cons);
+            try
+            {
+                lfgChannel.getHistory().retrievePast(50).queue(clearChannel);
+            }
+            catch( Exception e )
+            {
+                __out.printOut(this.getClass(), "[" + guild.getId() + "] " + e.getMessage());
             }
         }
     }
 
     @Override
-    public void onGuildLeave( GuildLeaveEvent event )
+    public void onGuildLeave(GuildLeaveEvent event)
     {
-        for( Integer id : scheduleManager.getEntriesByGuild( event.getGuild().getId() ) )
-        {
-            scheduleManager.removeId( id );
-        }
+        Guild guild = event.getGuild();
+
+        Main.getGroupManager().removeGuild( guild.getId() );
     }
 }

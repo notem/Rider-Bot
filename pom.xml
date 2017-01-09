@@ -20,7 +20,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.schedulerbot.Main</mainClass>
+                            <mainClass>io.lfgdiscordbot.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
