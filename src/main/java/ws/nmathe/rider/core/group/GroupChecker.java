@@ -1,6 +1,6 @@
-package io.lfgdiscordbot.core.group;
+package ws.nmathe.rider.core.group;
 
-import io.lfgdiscordbot.Main;
+import ws.nmathe.rider.Main;
 
 import java.util.HashMap;
 

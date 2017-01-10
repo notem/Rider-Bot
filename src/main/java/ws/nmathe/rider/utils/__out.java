@@ -1,4 +1,4 @@
-package io.lfgdiscordbot.utils;
+package ws.nmathe.rider.utils;
 
 import java.time.LocalTime;
 

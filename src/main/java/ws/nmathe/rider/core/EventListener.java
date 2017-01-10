@@ -1,11 +1,10 @@
-package io.lfgdiscordbot.core;
+package ws.nmathe.rider.core;
 
-import io.lfgdiscordbot.Main;
-import io.lfgdiscordbot.core.command.CommandHandler;
-import io.lfgdiscordbot.utils.MessageUtilities;
-import io.lfgdiscordbot.utils.VerifyUtilities;
-import io.lfgdiscordbot.utils.__out;
-import net.dv8tion.jda.core.entities.ChannelType;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.core.command.CommandHandler;
+import ws.nmathe.rider.utils.MessageUtilities;
+import ws.nmathe.rider.utils.VerifyUtilities;
+import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;

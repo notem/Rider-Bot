@@ -1,4 +1,4 @@
-package io.lfgdiscordbot.utils;
+package ws.nmathe.rider.utils;
 
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;

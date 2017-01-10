@@ -1,9 +1,9 @@
-package io.lfgdiscordbot.commands.general;
+package ws.nmathe.rider.commands.general;
 
-import io.lfgdiscordbot.Main;
-import io.lfgdiscordbot.commands.Command;
-import io.lfgdiscordbot.core.command.CommandHandler;
-import io.lfgdiscordbot.utils.MessageUtilities;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.commands.Command;
+import ws.nmathe.rider.core.command.CommandHandler;
+import ws.nmathe.rider.utils.MessageUtilities;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 

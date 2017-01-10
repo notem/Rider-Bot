@@ -1,10 +1,10 @@
-package io.lfgdiscordbot;
+package ws.nmathe.rider;
 
-import io.lfgdiscordbot.core.command.CommandHandler;
-import io.lfgdiscordbot.core.EventListener;
-import io.lfgdiscordbot.core.group.GroupManager;
-import io.lfgdiscordbot.utils.BotSettings;
-import io.lfgdiscordbot.utils.__out;
+import ws.nmathe.rider.core.command.CommandHandler;
+import ws.nmathe.rider.core.EventListener;
+import ws.nmathe.rider.core.group.GroupManager;
+import ws.nmathe.rider.utils.BotSettings;
+import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

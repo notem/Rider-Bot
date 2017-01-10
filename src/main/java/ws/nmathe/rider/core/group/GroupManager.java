@@ -1,8 +1,8 @@
-package io.lfgdiscordbot.core.group;
+package ws.nmathe.rider.core.group;
 
-import io.lfgdiscordbot.Main;
-import io.lfgdiscordbot.utils.MessageUtilities;
-import io.lfgdiscordbot.utils.__out;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.utils.MessageUtilities;
+import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;

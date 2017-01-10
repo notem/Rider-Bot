@@ -1,6 +1,6 @@
-package io.lfgdiscordbot.utils;
+package ws.nmathe.rider.utils;
 
-import io.lfgdiscordbot.Main;
+import ws.nmathe.rider.Main;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;

@@ -1,9 +1,9 @@
-package io.lfgdiscordbot.commands.general;
+package ws.nmathe.rider.commands.general;
 
-import io.lfgdiscordbot.Main;
-import io.lfgdiscordbot.commands.Command;
-import io.lfgdiscordbot.core.group.GroupTable;
-import io.lfgdiscordbot.utils.__out;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.commands.Command;
+import ws.nmathe.rider.core.group.GroupTable;
+import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

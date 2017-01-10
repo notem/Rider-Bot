@@ -1,6 +1,6 @@
-package io.lfgdiscordbot.core.command;
+package ws.nmathe.rider.core.command;
 
-import io.lfgdiscordbot.Main;
+import ws.nmathe.rider.Main;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;

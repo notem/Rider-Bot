@@ -1,4 +1,4 @@
-package io.lfgdiscordbot.commands;
+package ws.nmathe.rider.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 

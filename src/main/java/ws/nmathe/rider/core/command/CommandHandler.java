@@ -1,10 +1,10 @@
-package io.lfgdiscordbot.core.command;
+package ws.nmathe.rider.core.command;
 
-import io.lfgdiscordbot.Main;
-import io.lfgdiscordbot.commands.Command;
-import io.lfgdiscordbot.commands.general.*;
-import io.lfgdiscordbot.utils.MessageUtilities;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.commands.Command;
+import ws.nmathe.rider.utils.MessageUtilities;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import ws.nmathe.rider.commands.general.*;
 
 import java.util.Collection;
 import java.util.HashMap;
