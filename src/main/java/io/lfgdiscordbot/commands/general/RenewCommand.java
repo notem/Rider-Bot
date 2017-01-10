@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
  */
 public class RenewCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;renew** - renews the LFG entry";
+    private static final String USAGE_BRIEF = "**;renew** - renews the LFG entry for another " + Main.getBotSettings().getExpire()/60 + " minutes";
     private static final String USAGE_EXTENDED = "";
 
     @Override

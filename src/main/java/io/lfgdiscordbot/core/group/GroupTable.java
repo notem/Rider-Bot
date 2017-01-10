@@ -48,7 +48,10 @@ public class GroupTable
 
         // remove from hashmaps and delete the message
         this.nameToOwnerMap.remove( groupToBeRemoved.getGroupName() );
-        this.joineeToOwnerMap.remove( groupToBeRemoved.getGroupName() );
+        for( String joinee : groupToBeRemoved.getJoinees())
+        {
+            this.joineeToOwnerMap.remove( joinee );
+        }
         groupToBeRemoved.deleteMsg();
         this.ownerToGroupMap.remove(owner);
     }
@@ -93,5 +96,26 @@ public class GroupTable
     public void renew( String owner )
     {
         this.getGroupByOwner(owner).renew();
+    }
+
+    void removeExpired()
+    {
+        ArrayList<String> expired = new ArrayList<>();
+        this.ownerToGroupMap.forEach( (owner, group) ->
+        {
+            if( group.isExpired() )
+            {
+                expired.add(owner);
+            }
+            else
+            {
+                group.update();
+            }
+        });
+
+        for( String owner : expired )
+        {
+            this.removeGroup( owner );
+        }
     }
 }

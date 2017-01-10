@@ -3,6 +3,7 @@ package io.lfgdiscordbot.core;
 import io.lfgdiscordbot.Main;
 import io.lfgdiscordbot.core.command.CommandHandler;
 import io.lfgdiscordbot.utils.MessageUtilities;
+import io.lfgdiscordbot.utils.VerifyUtilities;
 import io.lfgdiscordbot.utils.__out;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
@@ -26,6 +27,7 @@ public class EventListener extends ListenerAdapter
     private String prefix = Main.getBotSettings().getCommandPrefix();
     private String adminPrefix = Main.getBotSettings().getAdminPrefix();
     private String adminId = Main.getBotSettings().getAdminId();
+    private String chanName = Main.getBotSettings().getChannel();
 
     private static CommandHandler cmdHandler = Main.getCommandHandler();
 
@@ -39,18 +41,17 @@ public class EventListener extends ListenerAdapter
         if( content.startsWith(prefix) )
         {
             cmdHandler.handleCommand(event, 0);
-            if( !event.getChannelType().equals(ChannelType.PRIVATE) )
-                MessageUtilities.deleteMsg( event.getMessage(), null );
+            MessageUtilities.deleteMsg( event.getMessage(), null );
         }
 
-        else if (content.startsWith(adminPrefix) && userId.equals(adminId))
+        else if(content.startsWith(adminPrefix) && userId.equals(adminId))
         {
             cmdHandler.handleCommand(event, 1);
-            if( !event.getChannelType().equals(ChannelType.PRIVATE) )
-                MessageUtilities.deleteMsg( event.getMessage(), null );
+            MessageUtilities.deleteMsg( event.getMessage(), null );
         }
 
-        else if(event.getChannel().getName().equals("lfg") && !event.getAuthor().getId().equals(Main.getBotSelfUser().getId()))
+        else if(event.getChannel().getName().toLowerCase().equals(chanName.toLowerCase()) &&
+                !event.getAuthor().getId().equals(Main.getBotSelfUser().getId()))
         {
             MessageUtilities.deleteMsg( event.getMessage(), null );
         }
@@ -63,9 +64,9 @@ public class EventListener extends ListenerAdapter
 
         Main.getGroupManager().addGuild( guild.getId() );
 
-        if( !guild.getTextChannelsByName("lfg", false).isEmpty() )
+        if( VerifyUtilities.verifyPermissions(guild) )
         {
-            TextChannel lfgChannel = guild.getTextChannelsByName("lfg", false).get(0);
+            TextChannel lfgChannel = guild.getTextChannelsByName(chanName, false).get(0);
 
             Consumer<List<Message>> clearChannel = (list) ->
             {

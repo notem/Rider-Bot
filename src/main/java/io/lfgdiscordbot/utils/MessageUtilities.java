@@ -27,11 +27,8 @@ public class MessageUtilities
         {
             chan.sendMessage(content).queue( action );
         }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
-            e.printStackTrace();
-        }
+        catch( Exception ignored)
+        { }
     }
 
     /**
@@ -48,11 +45,8 @@ public class MessageUtilities
             user.openPrivateChannel();
             sendMsg( content, user.getPrivateChannel(), action );
         }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
-            e.printStackTrace();
-        }
+        catch( Exception ignored)
+        { }
     }
 
     /**
@@ -68,11 +62,8 @@ public class MessageUtilities
         {
             msg.editMessage(content).queue( action );
         }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
-            e.printStackTrace();
-        }
+        catch( Exception ignored)
+        { }
     }
 
     /**
@@ -87,10 +78,7 @@ public class MessageUtilities
         {
             msg.deleteMessage().queue( action );
         }
-        catch( Exception e)
-        {
-            __out.printOut( MessageUtilities.class, e.getMessage() );
-            e.printStackTrace();
-        }
+        catch( Exception ignored)
+        { }
     }
 }

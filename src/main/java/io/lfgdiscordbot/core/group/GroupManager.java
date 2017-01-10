@@ -8,6 +8,10 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -15,6 +19,7 @@ import java.util.function.Consumer;
 public class GroupManager
 {
     private HashMap<String, GroupTable> guildToGroupTableMap;
+    final ExecutorService executor = Executors.newCachedThreadPool();
 
     public GroupManager()
     {
@@ -23,13 +28,17 @@ public class GroupManager
 
     public void init()
     {
+        String chanName = Main.getBotSettings().getChannel();
+
         for( Guild guild : Main.getBotJda().getGuilds() )
         {
+            // put the guild in the map
             this.guildToGroupTableMap.put( guild.getId(), new GroupTable() );
 
-            if( !guild.getTextChannelsByName("lfg", false).isEmpty() )
+            // if the guild has a lfg channel, delete messages in the channel
+            if( !guild.getTextChannelsByName(chanName, false).isEmpty() )
             {
-                TextChannel lfgChannel = guild.getTextChannelsByName("lfg", false).get(0);
+                TextChannel lfgChannel = guild.getTextChannelsByName(chanName, false).get(0);
 
                 Consumer<List<Message>> clearChannel = (list) ->
                 {
@@ -49,6 +58,10 @@ public class GroupManager
                 }
             }
         }
+
+        // start the timer that checks for expired LFG entries
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate( new GroupChecker( this.guildToGroupTableMap ), 0, 60, TimeUnit.SECONDS);
     }
 
     public void addGuild( String guildId )
@@ -65,7 +78,7 @@ public class GroupManager
     {
         if( !this.guildToGroupTableMap.containsKey( guildId ) )
         {
-            return null;
+            this.guildToGroupTableMap.put( guildId, new GroupTable() );
         }
         return this.guildToGroupTableMap.get( guildId );
     }

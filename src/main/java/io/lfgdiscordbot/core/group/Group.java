@@ -8,13 +8,12 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  */
-public class Group
+class Group
 {
     private String owner;
     private Collection<String> joinees;
@@ -43,7 +42,7 @@ public class Group
 
     boolean isExpired()
     {
-        return time.until(ZonedDateTime.now(), SECONDS) >= Main.getBotSettings().getExpire();
+        return time.until(ZonedDateTime.now(), ChronoUnit.SECONDS) >= Main.getBotSettings().getExpire();
     }
 
     boolean isFull()
@@ -74,11 +73,6 @@ public class Group
     String getGroupName()
     {
         return this.groupName;
-    }
-
-    void setAmount( long amount )
-    {
-        this.amount = amount;
     }
 
     void renew()
@@ -117,15 +111,22 @@ public class Group
         string += "\n```md\n";
 
         if( this.amount <= 0 )
-            string += "Looking for <~~~~~~~~> players for [" + this.groupName + "](" + this.time.getHour() + ":" + this.time.getMinute() + ")```";
+            string += "Looking for <~~~~~~~~> players for [" + this.groupName + "](" +
+                    this.time.until(ZonedDateTime.now(), ChronoUnit.MINUTES) + "min)```";
 
         else if( this.amount - this.joinees.size() <= 0 )
-            string += "Looking for <  FULL  > players for [" + this.groupName + "](" + this.time.getHour() + ":" + this.time.getMinute() + ")```";
+            string += "Looking for <  FULL  > players for [" + this.groupName + "](" +
+                    this.time.until(ZonedDateTime.now(), ChronoUnit.MINUTES) + "min)```";
 
         else
             string += "Looking for < " + (this.amount - this.joinees.size()) + " more > players for [" + this.groupName +
-                    "](" + this.time.getHour() + ":" + this.time.getMinute() + ")```";
+                    "](" + this.time.until(ZonedDateTime.now(), ChronoUnit.MINUTES) + "min)```";
 
         return string;
+    }
+
+    void update()
+    {
+        MessageUtilities.editMsg( this.toMessageString(), this.message, null );
     }
 }

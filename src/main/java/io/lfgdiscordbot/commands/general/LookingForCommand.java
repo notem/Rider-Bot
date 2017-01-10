@@ -3,8 +3,12 @@ package io.lfgdiscordbot.commands.general;
 import io.lfgdiscordbot.Main;
 import io.lfgdiscordbot.commands.Command;
 import io.lfgdiscordbot.core.group.GroupTable;
-import net.dv8tion.jda.core.entities.TextChannel;
+import io.lfgdiscordbot.utils.__out;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
+import java.util.List;
 
 /**
  */
@@ -13,6 +17,8 @@ public class LookingForCommand implements Command
     private static final String USAGE_BRIEF = "**;lfg [GROUP NAME]** - creates a LFG entry with no player limit.\n" +
             "**;lf[x]m [GROUP NAME]** - creates a LFG entry with player limit equals to whatever [x] is";
     private static final String USAGE_EXTENDED = "";
+
+    private String chanName = Main.getBotSettings().getChannel();
 
     @Override
     public String help(boolean brief)
@@ -48,7 +54,7 @@ public class LookingForCommand implements Command
 
         // get the group size
         long amount = 0;
-        if( !args[index].equals("g") )
+        if( !args[index].equals("g") )  // if 'lfg' then amount = 0, otherwise 'lf[x]m' amount = x
         {
             amount = Integer.parseInt(args[index].replace("m",""));
         }
@@ -63,8 +69,29 @@ public class LookingForCommand implements Command
         }
         groupName += args[args.length-1];
 
+        if( gTable.groupNameExists( groupName ) ) // if a group already has that name, append an 'x'
+        {
+            groupName += "x";
+        }
+
         // get the lfg text channel and add the group
-        TextChannel channel = event.getGuild().getTextChannelsByName("lfg",false).get(0);
+        TextChannel channel = event.getGuild().getTextChannelsByName(chanName,false).get(0);
         gTable.addGroup( owner, amount, groupName, channel );
+
+        Guild guild = event.getGuild();
+        Member member = guild.getMember(event.getAuthor());
+
+        List<Role> roles = guild.getRolesByName(chanName, true);
+        if( !roles.isEmpty() && guild.getMember(Main.getBotSelfUser()).hasPermission(Permission.MANAGE_ROLES) )
+        {
+            try
+            {
+                guild.getController().addRolesToMember(member, roles.get(0)).queue();
+            }
+            catch( Exception e )
+            {
+                __out.printOut(this.getClass(), e.getMessage());
+            }
+        }
     }
 }

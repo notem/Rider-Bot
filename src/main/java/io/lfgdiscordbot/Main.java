@@ -74,7 +74,6 @@ public class Main
         groupManager.init();
     }
 
-
     public static SelfUser getBotSelfUser()
     {
         return jda.getSelfUser();
