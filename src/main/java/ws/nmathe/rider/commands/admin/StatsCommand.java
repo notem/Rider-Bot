@@ -1,5 +1,6 @@
 package ws.nmathe.rider.commands.admin;
 
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import ws.nmathe.rider.Main;
 import ws.nmathe.rider.commands.Command;
@@ -26,6 +27,10 @@ public class StatsCommand implements Command
     {
         String msg = "***Current Status***\n";
         msg += "Connected guilds: " + Main.getBotJda().getGuilds().size() + "\n";
+        for( Guild guild : Main.getBotJda().getGuilds() )
+        {
+            msg += guild.getId() + " (" + guild.getName() + ")";
+        }
 
         MessageUtilities.sendPrivateMsg(msg, event.getAuthor(), null);
     }
