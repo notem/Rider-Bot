@@ -16,17 +16,15 @@ import java.util.Collection;
  */
 public class HelpCommand implements Command
 {
-    private static CommandHandler cmdHandler = Main.getCommandHandler();
+    private CommandHandler cmdHandler = Main.getCommandHandler();
     private static String prefix = Main.getBotSettings().getCommandPrefix();
 
     private final String INTRO = "I am **" + Main.getBotSelfUser().getName() + "**, a bot providing group/party finder " +
-            "like functionality to your discord server." +
-            " A user may belong to only one LFG group at a time. " +
-            " Invite me to your discord and create a lfg channel to get started.\n\n";
+            "like functionality to your discord server.\n\n";
 
-    private static final String USAGE_EXTENDED = "\nTo get detailed information concerning the usage of any of these" +
-            " commands use the command **!help <command>** where the prefix for <command> is stripped off. " +
-            "Ex. **!help create**";
+    private static final String USAGE_EXTENDED = "For additional information and examples concerning these" +
+            " commands, use **" + prefix + "help <command>**" +
+            "\n\nEx. **" + prefix + "help join**";
 
     private static final String USAGE_BRIEF = "**" + prefix + "help** - Messages the user help messages.";
 
@@ -36,15 +34,15 @@ public class HelpCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
         if(args.length>1)
-            return "Too many arguments";
-        return "";
+            return false;
+        return true;
     }
 
     @Override
@@ -61,7 +59,7 @@ public class HelpCommand implements Command
             MessageUtilities.sendPrivateMsg( INTRO + "__**Available commands**__\n" +
                     commandsBrief + USAGE_EXTENDED, event.getAuthor(), null );
         }
-        // otherwise read search the commands for the first arg
+        // otherwise get the command using the first arg
         else
         {
             Command cmd = cmdHandler.getCommand( args[0] );

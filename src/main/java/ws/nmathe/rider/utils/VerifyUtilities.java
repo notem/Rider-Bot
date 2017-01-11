@@ -15,7 +15,6 @@ public class VerifyUtilities
 {
     public static boolean verifyPermissions( Guild guild )
     {
-        // complicated mess to find the bot as a member object, needs to be cleaned
         Member botAsMember = guild.getMember(Main.getBotSelfUser());
 
         List<Permission> perms = Arrays.asList( // required permissions
@@ -25,11 +24,6 @@ public class VerifyUtilities
 
         List<TextChannel> chans = guild.getTextChannelsByName(Main.getBotSettings().getChannel(),true);
 
-        if(chans.isEmpty() || !botAsMember.hasPermission(chans.get(0), perms))
-        {
-            return false;
-        }
-
-        return true;
+        return !(chans.isEmpty() || !botAsMember.hasPermission(chans.get(0), perms));
     }
 }

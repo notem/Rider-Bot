@@ -3,7 +3,7 @@ package ws.nmathe.rider;
 import ws.nmathe.rider.core.command.CommandHandler;
 import ws.nmathe.rider.core.EventListener;
 import ws.nmathe.rider.core.group.GroupManager;
-import ws.nmathe.rider.utils.BotSettings;
+import ws.nmathe.rider.core.BotSettings;
 import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;

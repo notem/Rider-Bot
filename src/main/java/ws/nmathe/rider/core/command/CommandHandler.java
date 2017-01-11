@@ -1,9 +1,8 @@
 package ws.nmathe.rider.core.command;
 
-import ws.nmathe.rider.Main;
 import ws.nmathe.rider.commands.Command;
-import ws.nmathe.rider.utils.MessageUtilities;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import ws.nmathe.rider.commands.admin.StatsCommand;
 import ws.nmathe.rider.commands.general.*;
 
 import java.util.Collection;
@@ -37,6 +36,7 @@ public class CommandHandler
         commands.put( "help", new HelpCommand() );
 
         // add administrator commands with their lookup name
+        adminCommands.put( "stats", new StatsCommand() );
     }
 
     public void handleCommand( MessageReceivedEvent event, Integer type )
@@ -58,25 +58,22 @@ public class CommandHandler
         // if the invoking command appears in commands
         if(commands.containsKey(cc.invoke))
         {
-            String err = commands.get(cc.invoke).verify(cc.args, cc.event);
+            boolean valid = commands.get(cc.invoke).verify(cc.args, cc.event);
 
             // do command action if valid arguments
-            if(err.isEmpty())
+            if(valid)
             {
-                commandExec.submit( () -> commands.get(cc.invoke).action(cc.args, cc.event));
+                commandExec.submit( () -> {
+                    try
+                    {
+                        commands.get(cc.invoke).action(cc.args, cc.event);
+                    }
+                    catch( Exception e )
+                    {
+                        e.printStackTrace();
+                    }
+                });
             }
-            // otherwise send error message
-            else
-            {
-                String msg = "Error : " + err;
-                MessageUtilities.sendPrivateMsg( msg, cc.event.getAuthor(), null );
-            }
-        }
-        // else the invoking command is invalid
-        else
-        {
-            String msg = "Error: Invalid command \"" + Main.getBotSettings().getCommandPrefix() + cc.invoke + "\"";
-            MessageUtilities.sendPrivateMsg( msg, cc.event.getAuthor(), null );
         }
     }
 
@@ -85,12 +82,21 @@ public class CommandHandler
         // for admin commands
         if(adminCommands.containsKey(cc.invoke))
         {
-            String err = adminCommands.get(cc.invoke).verify(cc.args, cc.event);
+            boolean valid = adminCommands.get(cc.invoke).verify(cc.args, cc.event);
 
             // do command action if valid arguments
-            if (err.equals(""))
+            if (valid)
             {
-                commandExec.submit( () -> adminCommands.get(cc.invoke).action(cc.args, cc.event));
+                commandExec.submit( () -> {
+                    try
+                    {
+                        adminCommands.get(cc.invoke).action(cc.args, cc.event);
+                    }
+                    catch( Exception e )
+                    {
+                        e.printStackTrace();
+                    }
+                });
             }
         }
     }

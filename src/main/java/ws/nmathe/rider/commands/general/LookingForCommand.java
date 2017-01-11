@@ -14,9 +14,14 @@ import java.util.List;
  */
 public class LookingForCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;lfg [GROUP NAME]** - creates a LFG entry with no player limit.\n" +
-            "**;lf[x]m [GROUP NAME]** - creates a LFG entry with player limit equals to whatever [x] is";
-    private static final String USAGE_EXTENDED = "";
+    private static final String USAGE_BRIEF = "**;lfg <arg>** - creates a LFG entry with no player limit.\n" +
+            "**;lf[x]m <arg>** - creates a LFG entry with player limit equals to whatever [x] is";
+    private static final String USAGE_EXTENDED = "<arg> should be some description of what you are forming" +
+            "a group for. If another group already exists with the same name, a 'x' is appended to your LFG group" +
+            "name. If your guild has a 'lfg' role and has this bot has the Role Management permission, 'lfg' will be" +
+            " added to your role. The role will later be removed when the entry is closed or expires.\n\n" +
+            "Ex1. **;lfg expert trials roulette**\n" +
+            "Ex2. **;lf4m expert trials roulette**";
 
     private String chanName = Main.getBotSettings().getChannel();
 
@@ -26,13 +31,13 @@ public class LookingForCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
-        return "";
+        return args.length >= 2;
     }
 
     @Override

@@ -9,8 +9,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
  */
 public class LeaveCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;leave** - leaves the LFG group you are in";
-    private static final String USAGE_EXTENDED = "";
+    private static final String USAGE_BRIEF = "**;leave** - leaves the LFG group that you are in, if you are in one.";
+    private static final String USAGE_EXTENDED = "Ex. **;leave**";
 
     @Override
     public String help(boolean brief)
@@ -18,13 +18,13 @@ public class LeaveCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
-        return "";
+        return true;
     }
 
     @Override

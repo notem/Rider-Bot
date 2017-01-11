@@ -9,8 +9,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
  */
 public class RenewCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;renew** - renews the LFG entry for another " + Main.getBotSettings().getExpire()/60 + " minutes";
-    private static final String USAGE_EXTENDED = "";
+    private static final String USAGE_BRIEF = "**;renew** - renews your LFG entry for another " +
+            Main.getBotSettings().getExpire()/60 + " minutes";
+    private static final String USAGE_EXTENDED = "Ex. **;renew**";
 
     @Override
     public String help(boolean brief)
@@ -18,13 +19,13 @@ public class RenewCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
-        return "";
+        return true;
     }
 
     @Override

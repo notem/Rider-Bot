@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class CloseCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;close** - removes the user's LFG entry";
-    private static final String USAGE_EXTENDED = "";
+    private static final String USAGE_BRIEF = "**;close** - removes your active LFG entry if you have one";
+    private static final String USAGE_EXTENDED = "Ex. **;close**";
 
     private String chanName = Main.getBotSettings().getChannel();
 
@@ -27,13 +27,14 @@ public class CloseCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
-        return "";
+        // arguments aren't used action. extra args do not matter
+        return true;
     }
 
     @Override

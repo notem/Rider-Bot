@@ -19,7 +19,7 @@ public class GroupChecker implements Runnable
     public void run()
     {
         this.mapOfGroupTables.forEach( (guildId, gTable) ->
-                Main.getGroupManager().executor.submit(gTable::removeExpired)
+                Main.getGroupManager().executor.submit(() -> gTable.removeExpired(guildId))
         );
     }
 }

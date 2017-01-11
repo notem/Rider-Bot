@@ -1,4 +1,4 @@
-package ws.nmathe.rider.utils;
+package ws.nmathe.rider.core;
 
 import java.io.*;
 import java.util.Properties;

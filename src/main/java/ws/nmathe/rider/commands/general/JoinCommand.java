@@ -16,9 +16,11 @@ import java.util.List;
  */
 public class JoinCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;join [GROUP NAME or GROUP LEADER]** - joins a group if the player" +
+    private static final String USAGE_BRIEF = "**;join <arg>** - joins a group if the player" +
             " limit hasn't been reached.";
-    private static final String USAGE_EXTENDED = "";
+    private static final String USAGE_EXTENDED = "<arg> may be the group leader's name or the group name";
+    private static final String EXAMPLES = "Ex1. **;join @noteless**" +
+            "\nEx2. **;join expert trials roulette**";
 
     private String chanName = Main.getBotSettings().getChannel();
 
@@ -28,13 +30,13 @@ public class JoinCommand implements Command
         if( brief )
             return USAGE_BRIEF;
         else
-            return USAGE_BRIEF + "\n" + USAGE_EXTENDED;
+            return USAGE_BRIEF + "\n\n" + USAGE_EXTENDED;
     }
 
     @Override
-    public String verify(String[] args, MessageReceivedEvent event)
+    public boolean verify(String[] args, MessageReceivedEvent event)
     {
-        return "";
+        return args.length >= 1;
     }
 
     @Override

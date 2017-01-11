@@ -1,10 +1,17 @@
 package ws.nmathe.rider.core.group;
 
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import ws.nmathe.rider.Main;
+import ws.nmathe.rider.utils.__out;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  */
@@ -40,6 +47,7 @@ public class GroupTable
     {
         this.ownerToGroupMap.put( owner, new Group( owner, new ArrayList<>(), amount, groupName, ZonedDateTime.now(), channel ) );
         this.nameToOwnerMap.put( groupName, owner );
+        __out.printOut(this.getClass(), "LFG group '" + groupName + "' created.");
     }
 
     public void removeGroup( String owner )
@@ -98,7 +106,7 @@ public class GroupTable
         this.getGroupByOwner(owner).renew();
     }
 
-    void removeExpired()
+    void removeExpired(String guildId)
     {
         ArrayList<String> expired = new ArrayList<>();
         this.ownerToGroupMap.forEach( (owner, group) ->
@@ -106,6 +114,24 @@ public class GroupTable
             if( group.isExpired() )
             {
                 expired.add(owner);
+
+                __out.printOut(this.getClass(), "LFG group '" + group.getGroupName() + "' expired.");
+
+                Guild guild = Main.getBotJda().getGuildById( guildId );
+                Member member = guild.getMemberById(group.getOwner());
+
+                List<Role> roles = guild.getRolesByName(Main.getBotSettings().getChannel(), true);
+                if( !roles.isEmpty() && guild.getMember(Main.getBotSelfUser()).hasPermission(Permission.MANAGE_ROLES) )
+                {
+                    try
+                    {
+                        guild.getController().removeRolesFromMember(member, roles.get(0)).queue();
+                    }
+                    catch( Exception e )
+                    {
+                        __out.printOut(this.getClass(), e.getMessage());
+                    }
+                }
             }
             else
             {
