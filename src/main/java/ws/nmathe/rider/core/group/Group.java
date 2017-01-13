@@ -50,24 +50,9 @@ class Group
         return this.amount > 0 && (this.amount - this.joinees.size()) <= 0;
     }
 
-    void deleteMsg()
-    {
-        MessageUtilities.deleteMsg(this.message, null);
-    }
-
-    long getAmmount()
-    {
-        return this.amount;
-    }
-
     String getOwner()
     {
         return this.owner;
-    }
-
-    Collection<String> getJoinees()
-    {
-        return this.joinees;
     }
 
     String getGroupName()
@@ -75,28 +60,21 @@ class Group
         return this.groupName;
     }
 
-    void renew()
-    {
-        this.time = ZonedDateTime.now();
-
-        MessageChannel chan = this.message.getChannel();
-
-        MessageUtilities.deleteMsg(this.message, (ignored) ->
-                MessageUtilities.sendMsg( this.toMessageString(), chan, (message) ->
-                        this.message = message)
-        );
-    }
-
-    void addJoinee( String user )
+    synchronized void addJoinee( String user )
     {
         this.joinees.add(user);
         MessageUtilities.editMsg( this.toMessageString(), this.message, null );
     }
 
-    void removeJoinee( String user )
+    synchronized void removeJoinee( String user )
     {
         this.joinees.remove(user);
         MessageUtilities.editMsg( this.toMessageString(), this.message, null );
+    }
+
+    synchronized Collection<String> getJoinees()
+    {
+        return this.joinees;
     }
 
     private String toMessageString()
@@ -125,8 +103,26 @@ class Group
         return string;
     }
 
+    void renew()
+    {
+        this.time = ZonedDateTime.now();
+
+        MessageChannel chan = this.message.getChannel();
+
+        MessageUtilities.deleteMsg(this.message, (ignored) ->
+                MessageUtilities.sendMsg( this.toMessageString(), chan, (message) ->
+                        this.message = message)
+        );
+    }
+
     void update()
     {
         MessageUtilities.editMsg( this.toMessageString(), this.message, null );
     }
+
+    void deleteMsg()
+    {
+        MessageUtilities.deleteMsg(this.message, null);
+    }
+
 }

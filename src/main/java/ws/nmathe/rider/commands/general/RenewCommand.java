@@ -9,9 +9,10 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
  */
 public class RenewCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;renew** - renews your LFG entry for another " +
+    private static final String invoke = Main.getBotSettings().getCommandPrefix() + "renew";
+    private static final String USAGE_BRIEF = "**"+invoke+"** - renews your LFG entry for another " +
             Main.getBotSettings().getExpire()/60 + " minutes";
-    private static final String USAGE_EXTENDED = "Ex. **;renew**";
+    private static final String USAGE_EXTENDED = "Ex. **"+invoke+"**";
 
     @Override
     public String help(boolean brief)
@@ -33,7 +34,7 @@ public class RenewCommand implements Command
     {
         GroupTable gTable = Main.getGroupManager().getGroupTable( event.getGuild().getId() );
 
-        if( gTable.isAnOwner(event.getAuthor().getId()) )
+        if( gTable.isALeader(event.getAuthor().getId()) )
         {
             gTable.renew( event.getAuthor().getId() );
         }

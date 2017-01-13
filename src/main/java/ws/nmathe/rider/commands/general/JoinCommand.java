@@ -18,7 +18,8 @@ public class JoinCommand implements Command
 {
     private static final String USAGE_BRIEF = "**;join <arg>** - joins a group if the player" +
             " limit hasn't been reached.";
-    private static final String USAGE_EXTENDED = "<arg> may be the group leader's name or the group name";
+    private static final String USAGE_EXTENDED = "<arg> may be the group leader's name, a different user in the group," +
+            " or the group name";
     private static final String EXAMPLES = "Ex1. **;join @noteless**" +
             "\nEx2. **;join expert trials roulette**";
 
@@ -49,14 +50,34 @@ public class JoinCommand implements Command
         }
         key += args[args.length - 1];
 
+        key = key.replace("<","").replace("@","").replace(">","");
+
         GroupTable gTable = Main.getGroupManager().getGroupTable( event.getGuild().getId());
 
-        if( !gTable.isAJoinee( event.getAuthor().getId() ) )
+        if( gTable.isALeader(key) || gTable.isATitle(key) )
         {
-            gTable.addJoinee( key, event.getAuthor().getId() );
+            if (gTable.isAMember(event.getAuthor().getId()))
+            {
+                gTable.removeMember(event.getAuthor().getId());
+                gTable.addMember(key, event.getAuthor().getId());
+            } else
+            {
+                gTable.addMember(key, event.getAuthor().getId());
+            }
+        }
+        else if( gTable.isAMember(key) )
+        {
+            if (gTable.isAMember(event.getAuthor().getId()))
+            {
+                gTable.removeMember(event.getAuthor().getId());
+                gTable.addMember(key, event.getAuthor().getId());
+            } else
+            {
+                gTable.addMember(key, event.getAuthor().getId());
+            }
         }
 
-        if( gTable.isAnOwner( event.getAuthor().getId() ) )
+        if( gTable.isALeader( event.getAuthor().getId() ) )
         {
             gTable.removeGroup( event.getAuthor().getId() );
 

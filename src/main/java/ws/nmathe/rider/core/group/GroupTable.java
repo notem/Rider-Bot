@@ -10,112 +10,117 @@ import ws.nmathe.rider.utils.__out;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  */
 public class GroupTable
 {
-    private HashMap<String, Group> ownerToGroupMap;
-    private HashMap<String, String> nameToOwnerMap;
-    private HashMap<String, String> joineeToOwnerMap;
+    private ConcurrentHashMap<String, Group> leaderToGroupMap;
+    private ConcurrentHashMap<String, String> titleToOwnerMap;
+    private ConcurrentHashMap<String, String> memberToOwnerMap;
 
     GroupTable()
     {
-        this.ownerToGroupMap = new HashMap<>();
-        this.nameToOwnerMap = new HashMap<>();
-        this.joineeToOwnerMap = new HashMap<>();
+        this.leaderToGroupMap = new ConcurrentHashMap<>();
+        this.titleToOwnerMap = new ConcurrentHashMap<>();
+        this.memberToOwnerMap = new ConcurrentHashMap<>();
     }
 
-    public boolean isAnOwner( String owner )
+    public boolean isALeader(String leader )
     {
-        return this.ownerToGroupMap.containsKey( owner );
+        return this.leaderToGroupMap.containsKey( leader );
     }
 
-    public boolean groupNameExists( String groupName )
+    public boolean isATitle(String title )
     {
-        return this.nameToOwnerMap.containsKey( groupName );
+        return this.titleToOwnerMap.containsKey( title );
     }
 
-    public boolean isAJoinee( String joinee )
+    public boolean isAMember(String member )
     {
-        return this.joineeToOwnerMap.containsKey( joinee );
+        return this.memberToOwnerMap.containsKey( member );
+    }
+
+    public boolean isAMember(String member, String leader )
+    {
+        return this.memberToOwnerMap.containsKey(member) && this.memberToOwnerMap.get(member).equals(leader);
     }
 
     public void addGroup(String owner, long amount, String groupName, TextChannel channel)
     {
-        this.ownerToGroupMap.put( owner, new Group( owner, new ArrayList<>(), amount, groupName, ZonedDateTime.now(), channel ) );
-        this.nameToOwnerMap.put( groupName, owner );
-        __out.printOut(this.getClass(), "LFG group '" + groupName + "' created.");
+        this.leaderToGroupMap.put( owner, new Group( owner, new ArrayList<>(), amount, groupName, ZonedDateTime.now(), channel ) );
+        this.titleToOwnerMap.put( groupName, owner );
     }
 
     public void removeGroup( String owner )
     {
-        Group groupToBeRemoved = this.ownerToGroupMap.get(owner);
+        Group groupToBeRemoved = this.leaderToGroupMap.get(owner);
 
         // remove from hashmaps and delete the message
-        this.nameToOwnerMap.remove( groupToBeRemoved.getGroupName() );
+        this.titleToOwnerMap.remove( groupToBeRemoved.getGroupName() );
         for( String joinee : groupToBeRemoved.getJoinees())
         {
-            this.joineeToOwnerMap.remove( joinee );
+            this.memberToOwnerMap.remove( joinee );
         }
         groupToBeRemoved.deleteMsg();
-        this.ownerToGroupMap.remove(owner);
+        this.leaderToGroupMap.remove(owner);
     }
 
-    private Group getGroupByOwner( String owner )
+    private Group getGroupByLeader(String leader )
     {
-        return this.ownerToGroupMap.get( owner );
+        return this.leaderToGroupMap.get( leader );
     }
 
-    private Group getGroupByName( String name )
+    private Group getGroupByTitle(String title )
     {
-        return this.ownerToGroupMap.get( this.nameToOwnerMap.get( name ) );
+        return this.leaderToGroupMap.get( this.titleToOwnerMap.get( title ) );
     }
 
-    private Group getGroupByJoinee( String joinee )
+    private Group getGroupByMember(String member )
     {
-        return this.ownerToGroupMap.get( this.joineeToOwnerMap.get( joinee ) );
+        return this.leaderToGroupMap.get( this.memberToOwnerMap.get( member ) );
     }
 
-    public void addJoinee( String key, String joinee )
+    public void addMember(String key, String member )
     {
-        String owner = key.replace("<@","").replace(">","");
-
-        if( this.isAnOwner( owner ) && !this.getGroupByOwner( owner ).isFull() )
+        if( this.isALeader( key ) && !this.getGroupByLeader( key ).isFull() )
         {
-            this.getGroupByOwner( owner ).addJoinee( joinee );
-            this.joineeToOwnerMap.put( joinee, owner );
+            this.getGroupByLeader( key ).addJoinee( member );
+            this.memberToOwnerMap.put( member, key );
         }
-        else if( this.groupNameExists( key ) && !this.getGroupByName(key).isFull() )
+        else if( this.isAMember( key ) && !this.getGroupByMember( key ).isFull() )
         {
-            this.getGroupByName( key ).addJoinee( joinee );
-            this.joineeToOwnerMap.put( joinee, this.nameToOwnerMap.get( key ) );
+            this.getGroupByMember( key ).addJoinee( member );
+            this.memberToOwnerMap.put( member, key );
+        }
+        else if( this.isATitle( key ) && !this.getGroupByTitle(key).isFull() )
+        {
+            this.getGroupByTitle( key ).addJoinee( member );
+            this.memberToOwnerMap.put( member, this.titleToOwnerMap.get( key ) );
         }
     }
 
-    public void removeJoinee( String joinee )
+    public void removeMember(String Member )
     {
-        this.getGroupByJoinee( joinee ).removeJoinee( joinee );
-        this.joineeToOwnerMap.remove( joinee );
+        this.getGroupByMember( Member ).removeJoinee( Member );
+        this.memberToOwnerMap.remove( Member );
     }
 
-    public void renew( String owner )
+    public void renew( String leader )
     {
-        this.getGroupByOwner(owner).renew();
+        this.getGroupByLeader(leader).renew();
     }
 
     void removeExpired(String guildId)
     {
         ArrayList<String> expired = new ArrayList<>();
-        this.ownerToGroupMap.forEach( (owner, group) ->
+        this.leaderToGroupMap.forEach( (leader, group) ->
         {
             if( group.isExpired() )
             {
-                expired.add(owner);
-
-                __out.printOut(this.getClass(), "LFG group '" + group.getGroupName() + "' expired.");
+                expired.add(leader);
 
                 Guild guild = Main.getBotJda().getGuildById( guildId );
                 Member member = guild.getMemberById(group.getOwner());
@@ -143,5 +148,10 @@ public class GroupTable
         {
             this.removeGroup( owner );
         }
+    }
+
+    public long getSize()
+    {
+        return this.leaderToGroupMap.size();
     }
 }

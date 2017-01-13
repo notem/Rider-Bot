@@ -16,8 +16,9 @@ import java.util.List;
  */
 public class CloseCommand implements Command
 {
-    private static final String USAGE_BRIEF = "**;close** - removes your active LFG entry if you have one";
-    private static final String USAGE_EXTENDED = "Ex. **;close**";
+    private static final String invoke = Main.getBotSettings().getCommandPrefix() + "close";
+    private static final String USAGE_BRIEF = "**"+invoke+"** - removes your active LFG entry if you have one";
+    private static final String USAGE_EXTENDED = "Ex. **"+invoke+"**";
 
     private String chanName = Main.getBotSettings().getChannel();
 
@@ -42,7 +43,7 @@ public class CloseCommand implements Command
     {
         GroupTable gTable = Main.getGroupManager().getGroupTable( event.getGuild().getId() );
 
-        if( gTable.isAnOwner( event.getAuthor().getId() ) )
+        if( gTable.isALeader( event.getAuthor().getId() ) )
         {
             gTable.removeGroup( event.getAuthor().getId() );
         }

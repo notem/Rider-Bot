@@ -1,5 +1,6 @@
 package ws.nmathe.rider.utils;
 
+import net.dv8tion.jda.core.entities.Channel;
 import ws.nmathe.rider.Main;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -25,5 +26,12 @@ public class VerifyUtilities
         List<TextChannel> chans = guild.getTextChannelsByName(Main.getBotSettings().getChannel(),true);
 
         return !(chans.isEmpty() || !botAsMember.hasPermission(chans.get(0), perms));
+    }
+
+    public static boolean verifyManagePerm( Guild guild, Channel chan )
+    {
+        Member botAsMember = guild.getMember(Main.getBotSelfUser());
+
+        return botAsMember.hasPermission(chan, Permission.MESSAGE_MANAGE);
     }
 }

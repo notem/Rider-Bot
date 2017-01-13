@@ -1,9 +1,12 @@
 package ws.nmathe.rider.core.command;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import ws.nmathe.rider.commands.Command;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import ws.nmathe.rider.commands.admin.StatsCommand;
 import ws.nmathe.rider.commands.general.*;
+import ws.nmathe.rider.utils.MessageUtilities;
+import ws.nmathe.rider.utils.VerifyUtilities;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * Handles MessageEvents containing commands, parsing them into containers then processing
+ * the command on a thread.
  */
 public class CommandHandler
 {
@@ -34,6 +39,7 @@ public class CommandHandler
         commands.put( "renew", new RenewCommand() );
         commands.put( "leave", new LeaveCommand() );
         commands.put( "help", new HelpCommand() );
+        commands.put( "kick", new KickCommand() );
 
         // add administrator commands with their lookup name
         adminCommands.put( "stats", new StatsCommand() );
@@ -67,6 +73,11 @@ public class CommandHandler
                     try
                     {
                         commands.get(cc.invoke).action(cc.args, cc.event);
+
+                        Thread.sleep(1000);
+
+                        if(!cc.event.isFromType(ChannelType.PRIVATE) && VerifyUtilities.verifyManagePerm(cc.event.getGuild(), cc.event.getTextChannel()))
+                            MessageUtilities.deleteMsg( cc.event.getMessage(), null );
                     }
                     catch( Exception e )
                     {
@@ -91,6 +102,11 @@ public class CommandHandler
                     try
                     {
                         adminCommands.get(cc.invoke).action(cc.args, cc.event);
+
+                        Thread.sleep(1000);
+
+                        if(!cc.event.isFromType(ChannelType.PRIVATE) && VerifyUtilities.verifyManagePerm(cc.event.getGuild(), cc.event.getTextChannel()))
+                            MessageUtilities.deleteMsg( cc.event.getMessage(), null );
                     }
                     catch( Exception e )
                     {

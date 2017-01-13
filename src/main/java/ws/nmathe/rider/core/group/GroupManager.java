@@ -8,22 +8,24 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 /**
+ * Manages the connected guilds and their guild specific group tables.
+ * However, (under the current implementation) this class does not operate
+ * on group tables. When adding a group to a group table, the guild's group
+ * table can be obtained through the groupManager but the caller must
+ * interface with the group table itself to add the group.
  */
 public class GroupManager
 {
-    private HashMap<String, GroupTable> guildToGroupTableMap;
+    private ConcurrentHashMap<String, GroupTable> guildToGroupTableMap;
     final ExecutorService executor = Executors.newCachedThreadPool();
 
     public GroupManager()
     {
-        this.guildToGroupTableMap = new HashMap<>();
+        this.guildToGroupTableMap = new ConcurrentHashMap<>();
     }
 
     public void init()
@@ -81,5 +83,15 @@ public class GroupManager
             this.guildToGroupTableMap.put( guildId, new GroupTable() );
         }
         return this.guildToGroupTableMap.get( guildId );
+    }
+
+    public long getTotalSize()
+    {
+        long size = 0;
+        for( GroupTable table : this.guildToGroupTableMap.values() )
+        {
+            size += table.getSize();
+        }
+        return size;
     }
 }

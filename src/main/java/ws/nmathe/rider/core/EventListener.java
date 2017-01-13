@@ -1,5 +1,6 @@
 package ws.nmathe.rider.core;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import ws.nmathe.rider.Main;
 import ws.nmathe.rider.core.command.CommandHandler;
 import ws.nmathe.rider.utils.MessageUtilities;
@@ -37,16 +38,19 @@ public class EventListener extends ListenerAdapter
         String content = event.getMessage().getContent();   // the raw string the user sent
         String userId = event.getAuthor().getId();          // the ID of the user
 
+        if( !event.getChannelType().equals(ChannelType.PRIVATE) && !VerifyUtilities.verifyPermissions(event.getGuild()) )
+        {
+            return;
+        }
+
         if( content.startsWith(prefix) )
         {
             cmdHandler.handleCommand(event, 0);
-            MessageUtilities.deleteMsg( event.getMessage(), null );
         }
 
         else if(content.startsWith(adminPrefix) && userId.equals(adminId))
         {
             cmdHandler.handleCommand(event, 1);
-            MessageUtilities.deleteMsg( event.getMessage(), null );
         }
 
         else if(event.getChannel().getName().toLowerCase().equals(chanName.toLowerCase()) &&

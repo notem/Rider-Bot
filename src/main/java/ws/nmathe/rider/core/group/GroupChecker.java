@@ -2,15 +2,15 @@ package ws.nmathe.rider.core.group;
 
 import ws.nmathe.rider.Main;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  */
 public class GroupChecker implements Runnable
 {
-    private HashMap<String, GroupTable> mapOfGroupTables;
+    private ConcurrentHashMap<String, GroupTable> mapOfGroupTables;
 
-    GroupChecker(HashMap<String, GroupTable> map)
+    GroupChecker(ConcurrentHashMap<String, GroupTable> map)
     {
         this.mapOfGroupTables = map;
     }

@@ -62,7 +62,8 @@ public class HelpCommand implements Command
         // otherwise get the command using the first arg
         else
         {
-            Command cmd = cmdHandler.getCommand( args[0] );
+            String tmp = args[0].startsWith("lf") ? "lf" : args[0];
+            Command cmd = cmdHandler.getCommand( tmp );
             if( cmd != null )
             {
                 String helpMsg = cmd.help(false);
