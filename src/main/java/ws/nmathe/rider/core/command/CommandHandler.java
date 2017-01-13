@@ -64,27 +64,32 @@ public class CommandHandler
         // if the invoking command appears in commands
         if(commands.containsKey(cc.invoke))
         {
-            boolean valid = commands.get(cc.invoke).verify(cc.args, cc.event);
-
-            // do command action if valid arguments
-            if(valid)
+            commandExec.submit( () ->
             {
-                commandExec.submit( () -> {
+                boolean valid = commands.get(cc.invoke).verify(cc.args, cc.event);
+
+                // do command action if valid arguments
+                if (valid)
+                {
                     try
                     {
                         commands.get(cc.invoke).action(cc.args, cc.event);
-
-                        Thread.sleep(1000);
-
-                        if(!cc.event.isFromType(ChannelType.PRIVATE) && VerifyUtilities.verifyManagePerm(cc.event.getGuild(), cc.event.getTextChannel()))
-                            MessageUtilities.deleteMsg( cc.event.getMessage(), null );
-                    }
-                    catch( Exception e )
+                    } catch (Exception e)
                     {
                         e.printStackTrace();
                     }
-                });
-            }
+                }
+
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(Exception ignored)
+                { }
+
+                if (!cc.event.isFromType(ChannelType.PRIVATE) && VerifyUtilities.verifyManagePerm(cc.event.getGuild(), cc.event.getTextChannel()))
+                    MessageUtilities.deleteMsg(cc.event.getMessage(), null);
+            });
         }
     }
 
@@ -102,11 +107,6 @@ public class CommandHandler
                     try
                     {
                         adminCommands.get(cc.invoke).action(cc.args, cc.event);
-
-                        Thread.sleep(1000);
-
-                        if(!cc.event.isFromType(ChannelType.PRIVATE) && VerifyUtilities.verifyManagePerm(cc.event.getGuild(), cc.event.getTextChannel()))
-                            MessageUtilities.deleteMsg( cc.event.getMessage(), null );
                     }
                     catch( Exception e )
                     {
