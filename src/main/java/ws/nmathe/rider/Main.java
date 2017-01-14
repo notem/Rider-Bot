@@ -48,7 +48,7 @@ public class Main
                 @Override
                 public String getName()
                 {
-                    return "LFG bot | " + botSettings.getCommandPrefix() + "help";
+                    return "LFG Bot | " + botSettings.getCommandPrefix() + "help";
                 }
 
                 @Override

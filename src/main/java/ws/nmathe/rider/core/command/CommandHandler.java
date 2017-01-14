@@ -3,6 +3,7 @@ package ws.nmathe.rider.core.command;
 import net.dv8tion.jda.core.entities.ChannelType;
 import ws.nmathe.rider.commands.Command;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import ws.nmathe.rider.commands.admin.NowPlayingCommand;
 import ws.nmathe.rider.commands.admin.StatsCommand;
 import ws.nmathe.rider.commands.general.*;
 import ws.nmathe.rider.utils.MessageUtilities;
@@ -40,9 +41,11 @@ public class CommandHandler
         commands.put( "leave", new LeaveCommand() );
         commands.put( "help", new HelpCommand() );
         commands.put( "kick", new KickCommand() );
+        commands.put( "setup", new SetupCommand() );
 
         // add administrator commands with their lookup name
         adminCommands.put( "stats", new StatsCommand() );
+        adminCommands.put( "playing", new NowPlayingCommand() );
     }
 
     public void handleCommand( MessageReceivedEvent event, Integer type )
