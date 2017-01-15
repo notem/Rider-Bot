@@ -21,7 +21,7 @@ public class HttpUtilities
     {
         try
         {
-            if(lastUpdate.until(ZonedDateTime.now(), ChronoUnit.MINUTES)<60)
+            if(lastUpdate.until(ZonedDateTime.now(), ChronoUnit.MINUTES)>60)
             {
                 JSONObject json = new JSONObject().put("server_count", i);
 
