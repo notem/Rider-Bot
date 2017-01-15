@@ -4,6 +4,7 @@ import ws.nmathe.rider.core.command.CommandHandler;
 import ws.nmathe.rider.core.EventListener;
 import ws.nmathe.rider.core.group.GroupManager;
 import ws.nmathe.rider.core.BotSettings;
+import ws.nmathe.rider.utils.HttpUtilities;
 import ws.nmathe.rider.utils.__out;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -72,6 +73,10 @@ public class Main
 
         commandHandler.init();
         groupManager.init();
+
+        String auth = botSettings.getWebToken();
+        if( auth != null )
+            HttpUtilities.updateCount(Main.getBotJda().getGuilds().size(), auth);
     }
 
     public static SelfUser getBotSelfUser()

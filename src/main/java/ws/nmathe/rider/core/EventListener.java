@@ -3,6 +3,7 @@ package ws.nmathe.rider.core;
 import net.dv8tion.jda.core.entities.ChannelType;
 import ws.nmathe.rider.Main;
 import ws.nmathe.rider.core.command.CommandHandler;
+import ws.nmathe.rider.utils.HttpUtilities;
 import ws.nmathe.rider.utils.MessageUtilities;
 import ws.nmathe.rider.utils.VerifyUtilities;
 import ws.nmathe.rider.utils.__out;
@@ -37,6 +38,13 @@ public class EventListener extends ListenerAdapter
         // store some properties of the message for use later
         String content = event.getMessage().getContent();   // the raw string the user sent
         String userId = event.getAuthor().getId();          // the ID of the user
+
+        if( !event.isFromType(ChannelType.PRIVATE) &&
+                (content.startsWith( prefix + "help")||(content.startsWith( prefix + "setup"))))
+        {
+            cmdHandler.handleCommand(event, 0);
+            return;
+        }
 
         if( !event.getChannelType().equals(ChannelType.PRIVATE) && !VerifyUtilities.verifyPermissions(event.getGuild()) )
         {
@@ -87,6 +95,10 @@ public class EventListener extends ListenerAdapter
             {
                 __out.printOut(this.getClass(), "[" + guild.getId() + "] " + e.getMessage());
             }
+
+            String auth = Main.getBotSettings().getWebToken();
+            if( auth != null )
+                HttpUtilities.updateCount(Main.getBotJda().getGuilds().size(), auth);
         }
     }
 
@@ -96,5 +108,9 @@ public class EventListener extends ListenerAdapter
         Guild guild = event.getGuild();
 
         Main.getGroupManager().removeGuild( guild.getId() );
+
+        String auth = Main.getBotSettings().getWebToken();
+        if( auth != null )
+            HttpUtilities.updateCount(Main.getBotJda().getGuilds().size(), auth);
     }
 }

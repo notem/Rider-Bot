@@ -97,6 +97,14 @@ public class BotSettings
         return this.properties.getProperty("token");
     }
 
+    public String getWebToken()
+    {
+        if( this.properties.contains("webtoken"))
+            return this.properties.getProperty("webtoken");
+        else
+            return null;
+    }
+
     public String getAdminId()
     {
         return this.properties.getProperty("admin_id");
