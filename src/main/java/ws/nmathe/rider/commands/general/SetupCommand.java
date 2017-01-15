@@ -10,7 +10,7 @@ import ws.nmathe.rider.utils.MessageUtilities;
 public class SetupCommand implements Command
 {
     private String BOTOATH_LINK = "https://discordapp.com/api/oauth2/authorize?client_id=" +
-            Main.getBotSelfUser().getId() + "&scope=bot&permissions=0\n";
+            Main.getBotSelfUser().getId() + "&scope=bot&permissions=268512256\n";
     private String prefix = Main.getBotSettings().getCommandPrefix();
 
     @Override
@@ -52,7 +52,7 @@ public class SetupCommand implements Command
                 "on the channel the command will not be removed, but the bot's behavior will not otherwise be" +
                 " negatively effected.";
 
-        MessageUtilities.sendPrivateMsg(msg + BOTOATH_LINK, event.getAuthor(), null);
+        MessageUtilities.sendPrivateMsg(msg + "\n\n"+ BOTOATH_LINK, event.getAuthor(), null);
     }
 }
 

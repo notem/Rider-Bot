@@ -23,8 +23,8 @@ public class HelpCommand implements Command
             "like functionality to your discord server.\n\n";
 
     private static final String USAGE_EXTENDED = "For additional information and examples concerning these" +
-            " commands, use **" + prefix + "help <command>**" +
-            "\n\nEx. **" + prefix + "help join**";
+            " commands, use **" + prefix + "help <command>**." +
+            " Ex. **" + prefix + "help join**";
 
     private static final String USAGE_BRIEF = "**" + prefix + "help** - Messages the user help messages.";
 
@@ -70,8 +70,5 @@ public class HelpCommand implements Command
                 MessageUtilities.sendPrivateMsg(helpMsg, event.getAuthor(), null);
             }
         }
-
-        if( !event.isFromType(ChannelType.PRIVATE) )
-            MessageUtilities.deleteMsg( event.getMessage(), null );
     }
 }

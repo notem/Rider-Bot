@@ -43,7 +43,7 @@ public class NowPlayingCommand implements Command
             @Override
             public String getUrl()
             {
-                return "";
+                return "http://nmathe.ws/bots/rider";
             }
 
             @Override
