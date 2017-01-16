@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import ws.nmathe.rider.Main;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -21,7 +20,7 @@ public class HttpUtilities
     {
         try
         {
-            if(lastUpdate.until(ZonedDateTime.now(), ChronoUnit.MINUTES)>60)
+            if(lastUpdate.until(LocalDateTime.now(), ChronoUnit.SECONDS)>60)
             {
                 JSONObject json = new JSONObject().put("server_count", i);
 
