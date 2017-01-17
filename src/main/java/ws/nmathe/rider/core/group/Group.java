@@ -89,7 +89,7 @@ class Group
         string += "\n```md\n";
 
         if( this.amount <= 0 )
-            string += "Looking for <~~~~~~~~> players for [" + this.groupName + "](" +
+            string += "Looking for <~      ~> players for [" + this.groupName + "](" +
                     this.time.until(ZonedDateTime.now(), ChronoUnit.MINUTES) + "min)```";
 
         else if( this.amount - this.joinees.size() <= 0 )

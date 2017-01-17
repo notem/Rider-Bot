@@ -1,15 +1,13 @@
 package ws.nmathe.rider.core;
 
-import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.impl.RoleImpl;
 import ws.nmathe.rider.Main;
 import ws.nmathe.rider.core.command.CommandHandler;
 import ws.nmathe.rider.utils.HttpUtilities;
 import ws.nmathe.rider.utils.MessageUtilities;
 import ws.nmathe.rider.utils.VerifyUtilities;
 import ws.nmathe.rider.utils.__out;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -95,11 +93,11 @@ public class EventListener extends ListenerAdapter
             {
                 __out.printOut(this.getClass(), "[" + guild.getId() + "] " + e.getMessage());
             }
-
-            String auth = Main.getBotSettings().getWebToken();
-            if( auth != null )
-                HttpUtilities.updateCount(Main.getBotJda().getGuilds().size(), auth);
         }
+
+        String auth = Main.getBotSettings().getWebToken();
+        if( auth != null )
+            HttpUtilities.updateCount(Main.getBotJda().getGuilds().size(), auth);
     }
 
     @Override
