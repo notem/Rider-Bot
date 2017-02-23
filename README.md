@@ -1,3 +1,7 @@
+## ALERT: Development on Rider-bot has been halted. Instead, I'll be working the [G4M3R discord bot](https://github.com/pedall/G4M3R) for the time being. However, I will continue to provide hosting for the bot.
+
+<hr>
+
 # Rider-Bot
 ## A simple 'looking for group' / party-finder discord bot written in Java 8 with JDA
 
@@ -13,8 +17,8 @@
 + Automate the bot's setup
 + Allow the expiration time to be configured per server
 + Implement a ban command to ban players from joining a group
-+ (if necessary) Implement bot sharding
-+ (if necessary) Use SQL as backend for storing group entries
++ Use SQL as a backend for storing group entries
++ Open private voice / text channels for groups
 
 ### Dependencies
 
