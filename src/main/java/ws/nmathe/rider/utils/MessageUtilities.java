@@ -33,6 +33,19 @@ public class MessageUtilities
         }
     }
 
+
+    public static void sendMsg( Message message, MessageChannel chan, Consumer<Message> action )
+    {
+        try
+        {
+            chan.sendMessage(message).queue( action );
+        }
+        catch( Exception e )
+        {
+            __out.printOut(MessageUtilities.class, e.getMessage());
+        }
+    }
+
     /**
      * sends a message to a private message channel, opening the channel before use
      *
@@ -65,6 +78,18 @@ public class MessageUtilities
         try
         {
             msg.editMessage(content).queue( action );
+        }
+        catch( Exception e)
+        {
+            __out.printOut(MessageUtilities.class, e.getMessage());
+        }
+    }
+
+    public static void editMsg(Message message, Message msg, Consumer<Message> action )
+    {
+        try
+        {
+            msg.editMessage(message).queue( action );
         }
         catch( Exception e)
         {

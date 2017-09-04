@@ -1,11 +1,9 @@
 package ws.nmathe.rider.core.group;
 
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import ws.nmathe.rider.Main;
+import ws.nmathe.rider.utils.MessageUtilities;
 import ws.nmathe.rider.utils.__out;
 
 import java.time.ZonedDateTime;
@@ -48,9 +46,9 @@ public class GroupTable
         return this.memberToOwnerMap.containsKey(member) && this.memberToOwnerMap.get(member).equals(leader);
     }
 
-    public void addGroup(String owner, long amount, String groupName, TextChannel channel)
+    public void addGroup(String owner, long amount, String groupName, TextChannel channel, Integer platform)
     {
-        this.leaderToGroupMap.put( owner, new Group( owner, new ArrayList<>(), amount, groupName, ZonedDateTime.now(), channel ) );
+        this.leaderToGroupMap.put( owner, new Group(owner, new ArrayList<>(), amount, groupName, ZonedDateTime.now(), channel, platform) );
         this.titleToOwnerMap.put( groupName, owner );
     }
 
@@ -83,28 +81,80 @@ public class GroupTable
         return this.leaderToGroupMap.get( this.memberToOwnerMap.get( member ) );
     }
 
-    public void addMember(String key, String member )
+    public void addMember(String key, String member)
     {
-        if( this.isALeader( key ) && !this.getGroupByLeader( key ).isFull() )
+        if(this.isALeader( key ) && !this.getGroupByLeader( key ).isFull())
         {
-            this.getGroupByLeader( key ).addJoinee( member );
+            Group group = this.getGroupByLeader(key);
+            group.getJoinees().forEach((userId)->
+            {
+                User user = Main.getBotJda().getUserById(userId);
+                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+            });
+            group.addJoinee(member);
             this.memberToOwnerMap.put( member, key );
+
+            if(this.getGroupByLeader(key).isFull())
+            {
+                group.getJoinees().forEach((userId)->
+                {
+                    User user = Main.getBotJda().getUserById(userId);
+                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                });
+            }
         }
         else if( this.isAMember( key ) && !this.getGroupByMember( key ).isFull() )
         {
-            this.getGroupByMember( key ).addJoinee( member );
+            Group group = this.getGroupByMember( key );
+            group.getJoinees().forEach((userId)->
+            {
+                User user = Main.getBotJda().getUserById(userId);
+                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+            });
+            group.addJoinee(member);
             this.memberToOwnerMap.put( member, key );
+
+            if(this.getGroupByMember(key).isFull())
+            {
+                group.getJoinees().forEach((userId)->
+                {
+                    User user = Main.getBotJda().getUserById(userId);
+                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                });
+            }
         }
         else if( this.isATitle( key ) && !this.getGroupByTitle(key).isFull() )
         {
-            this.getGroupByTitle( key ).addJoinee( member );
+            Group group = this.getGroupByTitle( key );
+            group.getJoinees().forEach((userId)->
+            {
+                User user = Main.getBotJda().getUserById(userId);
+                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+            });
+            group.addJoinee(member);
             this.memberToOwnerMap.put( member, this.titleToOwnerMap.get( key ) );
+
+            if(this.getGroupByTitle(key).isFull())
+            {
+                group.getJoinees().forEach((userId)->
+                {
+                    User user = Main.getBotJda().getUserById(userId);
+                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                });
+            }
         }
+
     }
 
     public void removeMember(String Member )
     {
-        this.getGroupByMember( Member ).removeJoinee( Member );
+        Group group = this.getGroupByMember(Member);
+        group.removeJoinee( Member );
+        group.getJoinees().forEach((userId)->
+        {
+            User user = Main.getBotJda().getUserById(userId);
+            MessageUtilities.sendPrivateMsg("<@" + Member + "> has left ``" + group.getGroupName() + "``!", user, null);
+        });
         this.memberToOwnerMap.remove( Member );
     }
 

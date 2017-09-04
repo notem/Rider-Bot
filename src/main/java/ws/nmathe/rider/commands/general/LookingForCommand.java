@@ -68,6 +68,33 @@ public class LookingForCommand implements Command
 
         index++;
 
+        Integer platform;
+        switch(args[index].toLowerCase())
+        {
+            case "ps":
+            case "ps4":
+                platform = 0;
+                index++;
+                break;
+
+            case "xbox":
+            case "xb":
+            case "xb1":
+                platform = 1;
+                index++;
+                break;
+
+            case "pc":
+            case "computer":
+                platform = 2;
+                index++;
+                break;
+
+            default:
+                platform = -1;
+                break;
+        }
+
         // get the group name
         String groupName = "";
         for( ; index < args.length - 1 ; index++)
@@ -84,7 +111,7 @@ public class LookingForCommand implements Command
 
         // get the lfg text channel and add the group
         TextChannel channel = event.getGuild().getTextChannelsByName(chanName,false).get(0);
-        gTable.addGroup( owner, amount, groupName, channel );
+        gTable.addGroup( owner, amount, groupName, channel, platform );
 
         Guild guild = event.getGuild();
         Member member = guild.getMember(event.getAuthor());
