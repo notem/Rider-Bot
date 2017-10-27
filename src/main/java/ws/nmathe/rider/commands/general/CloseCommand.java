@@ -17,7 +17,7 @@ import java.util.List;
 public class CloseCommand implements Command
 {
     private static final String invoke = Main.getBotSettings().getCommandPrefix() + "close";
-    private static final String USAGE_BRIEF = "**"+invoke+"** - removes your active LFG entry if you have one";
+    private static final String USAGE_BRIEF = "``"+invoke+"`` ~ removes your active LFG entry if you have one";
     private static final String USAGE_EXTENDED = "Ex. **"+invoke+"**";
 
     private String chanName = Main.getBotSettings().getChannel();

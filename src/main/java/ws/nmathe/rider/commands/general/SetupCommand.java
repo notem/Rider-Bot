@@ -19,7 +19,7 @@ public class SetupCommand implements Command
         String USAGE_EXTENDED = "\n\nYou can invite Rider to your discord server with " +
                 "this link: " + BOTOATH_LINK;
 
-        String USAGE_BRIEF = "**" + prefix + "setup** - the guide to getting " +
+        String USAGE_BRIEF = "``" + prefix + "setup`` ~ the guide to getting " +
                 "Rider working on your server.";
 
         if (brief)

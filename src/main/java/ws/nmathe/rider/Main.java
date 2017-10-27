@@ -47,26 +47,7 @@ public class Main
             jda.setAutoReconnect(true);
 
             // set the bot's 'game' message
-            jda.getPresence().setGame(new Game()
-            {
-                @Override
-                public String getName()
-                {
-                    return "LFG Bot | " + botSettings.getCommandPrefix() + "help";
-                }
-
-                @Override
-                public String getUrl()
-                {
-                    return "";
-                }
-
-                @Override
-                public GameType getType()
-                {
-                    return GameType.DEFAULT;
-                }
-            });
+            jda.getPresence().setGame(Game.of("LFG Bot | " + botSettings.getCommandPrefix() + "help"));
         }
         catch( Exception e )
         {

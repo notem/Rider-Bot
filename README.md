@@ -1,9 +1,14 @@
-### ALERT: Development on Rider-bot has been halted. Instead, I'll be working the [G4M3R discord bot](https://github.com/pedall/G4M3R) for the time being. However, I will continue to provide hosting for the bot.
+#### Warning:
+
+```dif
+- This is abandonware.
+- Code quality is poor!
+- Documentation is non-existant.
+```
 
 <hr>
 
 # Rider-Bot
-## A simple 'looking for group' / party-finder discord bot written in Java 8 with JDA
 
 ### Features
 + Create 'looking for group' entries quickly
@@ -11,22 +16,20 @@
 + Entries track members via mentions and allow option size limits
 + Groups are automatically removed after they expire (configurable)
 + Minutes since last update displayed on the entry
-+ Users are automatically asigned a role
++ Users are automatically assigned a role
 
-### Roadmap
-+ Automate the bot's setup
-+ Allow the expiration time to be configured per server
-+ Implement a ban command to ban players from joining a group
-+ Use SQL as a backend for storing group entries
-+ Open private voice / text channels for groups
+#### Prerequisites
++ Java 8
++ Maven
+
+### Setup
+1) Clone this repository
+2) Use maven to compile the application with dependencies
+3) Launch the bot with java, a configuration file should have been created
+4) Add your Discord-bot token to the configuration file
+5) Run the bot application (preferably in terminal window to view the basic log output)
 
 ### Dependencies
 
-+ [JDA](https://github.com/DV8FromTheWorld/JDA) - 3.0.BETA2 Build:108
++ [JDA](https://github.com/DV8FromTheWorld/JDA) - 3.3.1_290
 + [Unirest](https://github.com/Mashape/unirest-java) - 1.4.9
-
-### Suggestions/Complaints
-
-[A common discord server is setup for all my bots.](https://discord.gg/ZQZnXsC) If you need help, have suggestions, or wish to rant about something concerning my bot hit me up there.
-
-If you're looking for user documentation, the bots invite link, or a list of commands follow the link to my website or use the 'help' and 'setup' commands in discord server containing the bot.

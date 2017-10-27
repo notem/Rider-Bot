@@ -57,8 +57,7 @@ public class MessageUtilities
     {
         try
         {
-            user.openPrivateChannel().block();
-            sendMsg( content, user.getPrivateChannel(), action );
+            sendMsg( content, user.openPrivateChannel().complete(), action );
         }
         catch( Exception e)
         {
@@ -107,7 +106,7 @@ public class MessageUtilities
     {
         try
         {
-            msg.deleteMessage().queue( action );
+            msg.delete().queue( action );
         }
         catch( Exception e)
         {

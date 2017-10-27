@@ -86,61 +86,76 @@ public class GroupTable
         if(this.isALeader( key ) && !this.getGroupByLeader( key ).isFull())
         {
             Group group = this.getGroupByLeader(key);
+            String str = "<@" + member + "> has joined ``" + group.getGroupName() + "``!";
             group.getJoinees().forEach((userId)->
             {
                 User user = Main.getBotJda().getUserById(userId);
-                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+                MessageUtilities.sendPrivateMsg(str, user, null);
             });
+            User leader = Main.getBotJda().getUserById(group.getOwner());
+            MessageUtilities.sendPrivateMsg(str, leader, null);
             group.addJoinee(member);
             this.memberToOwnerMap.put( member, key );
 
             if(this.getGroupByLeader(key).isFull())
             {
+                String str2 = "``" + group.getGroupName() + "`` has been filled!";
                 group.getJoinees().forEach((userId)->
                 {
                     User user = Main.getBotJda().getUserById(userId);
-                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                    MessageUtilities.sendPrivateMsg(str2, user, null);
                 });
+                MessageUtilities.sendPrivateMsg(str2, leader, null);
             }
         }
         else if( this.isAMember( key ) && !this.getGroupByMember( key ).isFull() )
         {
             Group group = this.getGroupByMember( key );
+            String str = "<@" + member + "> has joined ``" + group.getGroupName() + "``!";
             group.getJoinees().forEach((userId)->
             {
                 User user = Main.getBotJda().getUserById(userId);
-                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+                MessageUtilities.sendPrivateMsg(str, user, null);
             });
+            User leader = Main.getBotJda().getUserById(group.getOwner());
+            MessageUtilities.sendPrivateMsg(str, leader, null);
             group.addJoinee(member);
             this.memberToOwnerMap.put( member, key );
 
             if(this.getGroupByMember(key).isFull())
             {
+                String str2 = "``" + group.getGroupName() + "`` has been filled!";
                 group.getJoinees().forEach((userId)->
                 {
                     User user = Main.getBotJda().getUserById(userId);
-                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                    MessageUtilities.sendPrivateMsg(str2, user, null);
                 });
+                MessageUtilities.sendPrivateMsg(str2, leader, null);
             }
         }
         else if( this.isATitle( key ) && !this.getGroupByTitle(key).isFull() )
         {
             Group group = this.getGroupByTitle( key );
+            String str = "<@" + member + "> has joined ``" + group.getGroupName() + "``!";
             group.getJoinees().forEach((userId)->
             {
                 User user = Main.getBotJda().getUserById(userId);
-                MessageUtilities.sendPrivateMsg("<@" + member + "> has joined ``" + group.getGroupName() + "``!", user, null);
+                MessageUtilities.sendPrivateMsg(str, user, null);
             });
+            User leader = Main.getBotJda().getUserById(group.getOwner());
+            MessageUtilities.sendPrivateMsg(str, leader, null);
             group.addJoinee(member);
             this.memberToOwnerMap.put( member, this.titleToOwnerMap.get( key ) );
 
             if(this.getGroupByTitle(key).isFull())
             {
+                String str2 = "``" + group.getGroupName() + "`` has been filled!";
                 group.getJoinees().forEach((userId)->
                 {
                     User user = Main.getBotJda().getUserById(userId);
-                    MessageUtilities.sendPrivateMsg("``" + group.getGroupName() + "`` has been filled!", user, null);
+                    MessageUtilities.sendPrivateMsg(str2, user, null);
                 });
+                MessageUtilities.sendPrivateMsg(str2, leader, null);
             }
         }
 
@@ -150,11 +165,14 @@ public class GroupTable
     {
         Group group = this.getGroupByMember(Member);
         group.removeJoinee( Member );
+        String str = "<@" + Member + "> has left ``" + group.getGroupName() + "``!";
         group.getJoinees().forEach((userId)->
         {
             User user = Main.getBotJda().getUserById(userId);
-            MessageUtilities.sendPrivateMsg("<@" + Member + "> has left ``" + group.getGroupName() + "``!", user, null);
+            MessageUtilities.sendPrivateMsg(str, user, null);
         });
+        User leader = Main.getBotJda().getUserById(group.getOwner());
+        MessageUtilities.sendPrivateMsg(str, leader, null);
         this.memberToOwnerMap.remove( Member );
     }
 

@@ -23,10 +23,10 @@ public class HelpCommand implements Command
             "like functionality to your discord server.\n\n";
 
     private static final String USAGE_EXTENDED = "For additional information and examples concerning these" +
-            " commands, use **" + prefix + "help <command>**." +
+            " commands, use **" + prefix + "help <command>**.\n" +
             " Ex. **" + prefix + "help join**";
 
-    private static final String USAGE_BRIEF = "**" + prefix + "help** - Messages the user help messages.";
+    private static final String USAGE_BRIEF = "``" + prefix + "help`` ~ Messages the user help messages.";
 
     @Override
     public String help(boolean brief)
@@ -56,8 +56,8 @@ public class HelpCommand implements Command
             String commandsBrief = ""; for( Command cmd : commands )
                 commandsBrief += cmd.help( true ) + "\n";
 
-            MessageUtilities.sendPrivateMsg( INTRO + "__**Available commands**__\n" +
-                    commandsBrief + USAGE_EXTENDED, event.getAuthor(), null );
+            MessageUtilities.sendPrivateMsg( INTRO + "**Available commands\n==================**\n" +
+                    commandsBrief + "\n\n" + USAGE_EXTENDED, event.getAuthor(), null );
         }
         // otherwise get the command using the first arg
         else

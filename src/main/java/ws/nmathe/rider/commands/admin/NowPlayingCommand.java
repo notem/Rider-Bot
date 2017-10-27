@@ -30,27 +30,6 @@ public class NowPlayingCommand implements Command
             str += args[i] + " ";
         }
         str += args[args.length-1];
-
-        final String finalStr = str;
-        Main.getBotJda().getPresence().setGame(new Game()
-        {
-            @Override
-            public String getName()
-            {
-                return finalStr;
-            }
-
-            @Override
-            public String getUrl()
-            {
-                return "http://nmathe.ws/bots/rider";
-            }
-
-            @Override
-            public GameType getType()
-            {
-                return GameType.DEFAULT;
-            }
-        });
+        Main.getBotJda().getPresence().setGame(Game.of(str));
     }
 }
